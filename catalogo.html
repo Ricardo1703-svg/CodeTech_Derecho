@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Salarios por Rol – Latinoamérica (USD/mes)</title>
+    <style>
+        :root {
+            --bg: #0b0f14;
+            --card: #121822;
+            --muted: #7b8794;
+            --text: #e6edf3;
+            --accent: #5cc8ff;
+            --border: #1f2a37;
+            --chip: #0f2533;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+            background: linear-gradient(180deg, #0b0f14 0%, #0c121a 100%);
+            color: var(--text);
+        }
+
+        .wrap {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin: 0;
+            letter-spacing: .2px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--chip);
+            border: 1px solid var(--border);
+            color: var(--accent);
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .25);
+            overflow: hidden;
+        }
+
+        .toolbar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            padding: 14px;
+            border-bottom: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .search {
+            flex: 1 1 260px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #0e141c;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 10px 12px;
+        }
+
+        .search input {
+            width: 100%;
+            background: transparent;
+            border: 0;
+            color: var(--text);
+            outline: none;
+            font-size: 14px;
+        }
+
+        .chip {
+            font-size: 12px;
+            padding: 6px 10px;
+            border: 1px solid var(--border);
+            border-radius: 999px;
+            color: var(--muted);
+            background: #0f131a;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead th {
+            text-align: left;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            color: var(--muted);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        th,
+        td {
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        tbody tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .role {
+            font-weight: 600;
+        }
+
+        .range {
+            font-variant-numeric: tabular-nums;
+        }
+
+        footer {
+            color: var(--muted);
+            font-size: 12px;
+            padding: 16px;
+        }
+
+        .note {
+            margin-top: 10px;
+        }
+
+        @media (max-width: 640px) {
+            .hide-sm {
+                display: none;
+            }
+
+            th,
+            td {
+                padding: 12px;
+            }
+
+            h1 {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <header>
+            <h1>Salarios individuales por rol <span class="badge" title="Rango mensual en USD">LatAm • USD/mes</span>
+            </h1>
+        </header>
+
+        <div class="card">
+            <div class="toolbar">
+                <div class="search">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        aria-hidden="true">
+                        <path d="M21 21l-4.35-4.35M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Z" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" />
+                    </svg>
+                    <input id="q" type="search" placeholder="Buscar rol… (ej. Backend, QA, DevOps)" />
+                </div>
+                <span class="chip">Mercado 2024–2025</span>
+            </div>
+
+            <table id="tabla-salarios" aria-describedby="nota">
+                <thead>
+                    <tr>
+                        <th>Rol</th>
+                        <th>Latinoamérica (USD/mes)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="role">Project Manager / Scrum Master</td>
+                        <td class="range">$2,000 – $3,500</td>
+                    </tr>
+                    <tr>
+                        <td class="role">Analista de Negocios (BA)</td>
+                        <td class="range">$1,500 – $2,500</td>
+                    </tr>
+                    <tr>
+                        <td class="role">Arquitecto de Software</td>
+                        <td class="range">$3,000 – $5,000</td>
+                    </tr>
+                    <tr>
+                        <td class="role">UI/UX Designer</td>
+                        <td class="range">$1,200 – $2,000</td>
+                    </tr>
+                    <tr>
+                        <td class="role">Frontend Developer</td>
+                        <td class="range">$1,500 – $3,000</td>
+                    </tr>
+                    <tr>
+                        <td class="role">Backend Developer</td>
+                        <td class="range">$1,800 – $3,500</td>
+                    </tr>
+                    <tr>
+                        <td class="role">Mobile Developer</td>
+                        <td class="range">$1,800 – $3,500</td>
+                    </tr>
+                    <tr>
+                        <td class="role">QA Engineer / Tester</td>
+                        <td class="range">$1,200 – $2,200</td>
+                    </tr>
+                    <tr>
+                        <td class="role">DevOps Engineer</td>
+                        <td class="range">$2,500 – $4,000</td>
+                    </tr>
+                    <tr>
+                        <td class="role">Soporte Técnico (Helpdesk)</td>
+                        <td class="range">$800 – $1,500</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <footer id="nota">
+                <div>Referencias: rangos estimados para Latinoamérica; pueden variar por país, seniority y modalidad de
+                    contratación.</div>
+                <div class="note">Tip: usa el buscador para filtrar por rol.</div>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        const input = document.getElementById('q');
+        const rows = Array.from(document.querySelectorAll('#tabla-salarios tbody tr'));
+        input.addEventListener('input', () => {
+            const term = input.value.trim().toLowerCase();
+            rows.forEach(r => {
+                const role = r.querySelector('.role').textContent.toLowerCase();
+                r.style.display = role.includes(term) ? '' : 'none';
+            });
+        });
+    </script>
+</body>
+
+</html>
