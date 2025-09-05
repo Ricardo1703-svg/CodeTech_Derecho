@@ -1,0 +1,354 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Codetech — Desarrollo de Software a Medida</title>
+    <meta name="description"
+        content="Codetech desarrolla soluciones de software a medida: web, mobile, APIs y automatizaciones. Planes claros y soporte profesional." />
+    <link rel="icon" href="data:;base64,iVBORw0KGgo=" />
+    <style>
+        :root {
+            --accent: #2563eb;
+            --muted: #6b7280;
+            --card: #ffffff;
+            --bg: #f8fafc
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            font-family: Inter, system-ui, Arial, sans-serif;
+            margin: 0;
+            background: var(--bg);
+            color: #0f172a;
+            line-height: 1.5
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 28px
+        }
+
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 0
+        }
+
+        .brand {
+            display: flex;
+            gap: 12px;
+            align-items: center
+        }
+
+        .logo {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--accent), #06b6d4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700
+        }
+
+        nav a {
+            margin-left: 18px;
+            color: var(--muted);
+            text-decoration: none;
+            font-weight: 600
+        }
+
+        .hero {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            align-items: center;
+            padding: 28px 0
+        }
+
+        .hero-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 16px
+        }
+
+        h1 {
+            font-size: clamp(26px, 4vw, 40px);
+            margin: 0
+        }
+
+        p.lead {
+            color: var(--muted);
+            margin: 0;
+            font-size: 1.05rem
+        }
+
+        .cta {
+            margin-top: 10px;
+            display: flex;
+            gap: 12px
+        }
+
+        .btn {
+            padding: 10px 16px;
+            border-radius: 10px;
+            border: 0;
+            cursor: pointer;
+            font-weight: 700
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white
+        }
+
+        .btn-ghost {
+            background: transparent;
+            border: 2px solid rgba(15, 23, 42, 0.06)
+        }
+
+        .pricing {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+            margin-top: 22px
+        }
+
+        .card {
+            background: var(--card);
+            padding: 18px;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(2, 6, 23, 0.06)
+        }
+
+        .price {
+            font-size: 1.6rem;
+            font-weight: 800
+        }
+
+        .muted {
+            color: var(--muted)
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 28px
+        }
+
+        footer {
+            margin-top: 36px;
+            padding: 24px 0;
+            color: var(--muted);
+            display: flex;
+            justify-content: space-between;
+            align-items: center
+        }
+
+        /* responsiveness */
+        @media(min-width:900px) {
+            .hero {
+                grid-template-columns: 1fr 420px
+            }
+
+            .hero-grid {
+                align-self: start
+            }
+        }
+
+        .testimonial {
+            background: linear-gradient(180deg, rgba(37, 99, 235, 0.05), transparent);
+            padding: 12px;
+            border-radius: 8px
+        }
+
+        a.cta-link {
+            text-decoration: none
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="brand">
+                <div class="logo">CT</div>
+                <div>
+                    <div style="font-weight:800">Codetech</div>
+                    <div style="font-size:12px;color:var(--muted)">Software a medida · Web · Mobile · APIs</div>
+                </div>
+            </div>
+            <nav aria-label="Navegación principal">
+                <a href="#servicios">Servicios</a>
+                <a href="#planes">Planes</a>
+                <a href="planes.html">Detalles planes</a>
+                <a href="#contacto">Contacto</a>
+            </nav>
+        </header>
+
+        <main>
+            <section class="hero">
+                <div class="hero-grid">
+                    <h1>Soluciones de software que impulsan tu negocio</h1>
+                    <p class="lead">Diseñamos, desarrollamos e implementamos productos digitales robustos y seguros:
+                        desde MVPs hasta plataformas empresariales. Entregas ágiles, comunicación clara y soporte
+                        dedicado.</p>
+                    <div class="cta">
+                        <a class="cta-link"
+                            href="mailto:ventas@codetech.com?subject=Interés%20en%20solución%20a%20medida"><button
+                                class="btn btn-primary">Solicitar presupuesto</button></a>
+                        <a class="cta-link" href="#planes"><button class="btn btn-ghost">Ver planes</button></a>
+                    </div>
+
+                    <div id="servicios" style="margin-top:18px">
+                        <h3 style="margin:0 0 8px 0">¿Qué hacemos?</h3>
+                        <div class="features">
+                            <div class="card"><strong>Desarrollo Web</strong>
+                                <div class="muted" style="margin-top:6px">Aplicaciones responsive, e-commerce y
+                                    portales.</div>
+                            </div>
+                            <div class="card"><strong>Mobile</strong>
+                                <div class="muted" style="margin-top:6px">iOS & Android nativas o multiplataforma.</div>
+                            </div>
+                            <div class="card"><strong>APIs & Integraciones</strong>
+                                <div class="muted" style="margin-top:6px">Microservicios, integraciones con ERPs y
+                                    pasarelas de pago.</div>
+                            </div>
+                            <div class="card"><strong>Soporte & Mantenimiento</strong>
+                                <div class="muted" style="margin-top:6px">SLA, monitoreo y actualizaciones continuas.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <aside class="card" aria-labelledby="pricing-title">
+                    <div id="pricing-title">
+                        <div style="font-size:12px;color:var(--muted)">Planes desde</div>
+                        <div class="price">$800 <span style="font-weight:600;font-size:14px">/ proyecto inicial</span>
+                        </div>
+                        <div class="muted" style="margin-top:8px">Planes flexibles con opción de equipo dedicado o
+                            tarifas por hora.</div>
+                    </div>
+
+                    <div style="margin-top:16px">
+                        <div style="display:flex;gap:8px;margin-bottom:10px">
+                            <div style="flex:1;background:#f1f5f9;padding:8px;border-radius:8px;text-align:center">MVP
+                                Rápido</div>
+                            <div style="flex:1;background:#f1f5f9;padding:8px;border-radius:8px;text-align:center">
+                                Producto Escalable</div>
+                        </div>
+                        <a class="cta-link" href="planes.html"><button class="btn btn-primary" style="width:100%">Ver
+                                detalles de planes</button></a>
+                        <a class="cta-link" href="#contacto"><button class="btn"
+                                style="width:100%;margin-top:8px">Hablar con un especialista</button></a>
+                    </div>
+                </aside>
+            </section>
+
+            <section id="planes" style="margin-top:28px">
+                <h2 style="margin-bottom:12px">Planes populares</h2>
+                <div class="pricing">
+                    <div class="card">
+                        <div style="font-weight:800">Starter</div>
+                        <div class="muted" style="margin:8px 0">Ideal para MVPs y startups</div>
+                        <div class="price">$800</div>
+                        <ul class="muted">
+                            <li>Alcance: 4 semanas</li>
+                            <li>1 desarrollador + QA básico</li>
+                            <li>1 despliegue en producción</li>
+                        </ul>
+                        <div style="margin-top:10px"><a href="planes.html#starter" class="cta-link"><button
+                                    class="btn btn-primary">Ver más</button></a></div>
+                    </div>
+
+                    <div class="card">
+                        <div style="font-weight:800">Professional</div>
+                        <div class="muted" style="margin:8px 0">Para pymes y proyectos con usuarios reales</div>
+                        <div class="price">$2,800</div>
+                        <ul class="muted">
+                            <li>Alcance: 2-3 meses</li>
+                            <li>Equipo: 2 developers + 1 PM + QA</li>
+                            <li>Integraciones y hosting básico</li>
+                        </ul>
+                        <div style="margin-top:10px"><a href="planes.html#professional" class="cta-link"><button
+                                    class="btn btn-primary">Ver más</button></a></div>
+                    </div>
+
+                    <div class="card">
+                        <div style="font-weight:800">Enterprise</div>
+                        <div class="muted" style="margin:8px 0">Soluciones a medida y a escala</div>
+                        <div class="price">Desde $8,500</div>
+                        <ul class="muted">
+                            <li>Alcance: según alcance</li>
+                            <li>Equipo dedicado, SLA y soporte 24/7</li>
+                            <li>Arquitectura escalable y seguridad avanzada</li>
+                        </ul>
+                        <div style="margin-top:10px"><a href="planes.html#enterprise" class="cta-link"><button
+                                    class="btn btn-primary">Ver más</button></a></div>
+                    </div>
+                </div>
+            </section>
+
+            <section style="margin-top:32px">
+                <h3>¿Por qué elegir Codetech?</h3>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px">
+                    <div class="card"><strong>Metodología ágil</strong>
+                        <div class="muted">Sprints cortos, entregas frecuentes y feedback continuo.</div>
+                    </div>
+                    <div class="card"><strong>Transparencia</strong>
+                        <div class="muted">Reportes semanales, tablero con tareas y control de entregables.</div>
+                    </div>
+                    <div class="card"><strong>Seguridad</strong>
+                        <div class="muted">Auditorías, encriptación y buenas prácticas DevSecOps.</div>
+                    </div>
+                    <div class="card"><strong>Soporte</strong>
+                        <div class="muted">Planes de mantenimiento con SLA y monitoreo.</div>
+                    </div>
+                </div>
+            </section>
+
+            <section style="margin-top:32px">
+                <h3>Testimonios</h3>
+                <div
+                    style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin-top:12px">
+                    <div class="testimonial"><strong>María P.</strong> — "Codetech nos ayudó a lanzar nuestro MVP en 6
+                        semanas. Comunicación excelente y entrega puntual."</div>
+                    <div class="testimonial"><strong>Carlos R.</strong> — "Equipo profesional y enfoque claro en
+                        negocio. Recomendado para proyectos serios."</div>
+                </div>
+            </section>
+
+            <section id="contacto" style="margin-top:32px">
+                <h3>Contacto</h3>
+                <div class="card" style="display:flex;gap:12px;flex-direction:column">
+                    <h2>Hablemos de tu proyecto</h2>
+                    <p class="lead">Contacta a nuestro equipo de ventas y te responderán a la brevedad posible.</p>
+
+                    <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+                        <a href="https://wa.me/50374130924?text=Hola%20Codetech,%20quisiera%20más%20información"
+                            target="_blank" class="cta-link"><button type="button" class="btn btn-primary">Contactar
+                                por WhatsApp</button></a>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <div>© Codetech — Desarrollo de Software · <span class="muted">El Salvador</span></div>
+            <div class="muted">Ventas: ventas@codetech.com · Tel: +503 7000 0000</div>
+        </footer>
+    </div>
+</body>
+
+</html>

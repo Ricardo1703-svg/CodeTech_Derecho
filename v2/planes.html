@@ -1,108 +1,71 @@
+<!-- plans.html -->
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Planes</title>
+    <title>Planes — Codetech</title>
+    <meta name="description"
+        content="Detalles y comparativa de planes de Codetech: Starter, Professional y Enterprise." />
     <style>
         body {
-            font-family: "Segoe UI", Roboto, sans-serif;
-            background: #0b1220;
-            /* mismo fondo que la principal */
+            font-family: Inter, system-ui, Arial, sans-serif;
             margin: 0;
-            color: #111827;
+            background: #f8fafc;
+            color: #0f172a
         }
 
         .container {
             max-width: 960px;
             margin: 0 auto;
-            padding: 20px;
-        }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 24px;
-            color: #facc15;
-        }
-
-        header a {
-            text-decoration: none;
-            color: #facc15;
-            /* amarillo contraste */
-            font-weight: 500;
-        }
-
-        h1,
-        h2,
-        h3 {
-            margin-top: 0;
-            color: #111827;
-        }
-
-        .muted {
-            color: #6b7280;
-            font-size: 14px;
+            padding: 28px
         }
 
         .card {
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-            padding: 20px;
-            margin-bottom: 20px;
+            padding: 16px;
+            border-radius: 10px;
+            box-shadow: 0 6px 18px rgba(2, 6, 23, 0.06)
+        }
+
+        h1 {
+            margin: 0 0 8px 0
         }
 
         .grid {
             display: grid;
-            gap: 20px;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 12px;
+            margin-top: 16px
+        }
+
+        ul {
+            padding-left: 18px
+        }
+
+        .faq {
+            margin-top: 18px
         }
 
         .badge {
-            background: #2563eb;
-            color: white;
-            font-weight: 600;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 14px;
-        }
-
-        ul,
-        ol {
-            padding-left: 20px;
-        }
-
-        a {
-            color: #2563eb;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-        footer {
-            text-align: center;
-            font-size: 14px;
-            margin-top: 24px;
-            color: white;
-            opacity: 0.9;
+            display: inline-block;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: #eef2ff;
+            font-weight: 700
         }
     </style>
 </head>
 
 <body>
     <div class="container">
-        <header>
+        <header style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px">
             <div>
-                <div style="font-weight:800;font-size:18px">Codetech</div>
-                <div style="font-size:13px">Planes y detalles</div>
+                <div style="font-weight:800">Codetech</div>
+                <div style="color:#6b7280;font-size:13px">Planes y detalles</div>
             </div>
-            <div><a href="https://ricardo1703-svg.github.io/CodeTech_Derecho/">← Volver a inicio</a></div>
+            <div><a href="index.html">← Volver a inicio</a></div>
         </header>
 
         <main>
@@ -115,11 +78,11 @@
                     <div class="card">
                         <div style="display:flex;justify-content:space-between;align-items:center">
                             <div><strong>Starter</strong>
-                                <div class="muted">Ideal para validar ideas</div>
+                                <div style="color:#6b7280">Ideal para validar ideas</div>
                             </div>
                             <div class="badge">$800</div>
                         </div>
-                        <hr>
+                        <hr style="margin:10px 0">
                         <ul>
                             <li>Alcance: 4 semanas (MVP)</li>
                             <li>1 desarrollador + QA</li>
@@ -127,16 +90,19 @@
                             <li>1 despliegue a producción</li>
                             <li>Soporte: 2 semanas post-entrega</li>
                         </ul>
+                        <div style="margin-top:10px"><a
+                                href="mailto:ventas@codetech.com?subject=Plan%20Starter">Contactar para contratar</a>
+                        </div>
                     </div>
 
                     <div class="card">
                         <div style="display:flex;justify-content:space-between;align-items:center">
                             <div><strong>Professional</strong>
-                                <div class="muted">Para negocios en crecimiento</div>
+                                <div style="color:#6b7280">Para negocios en crecimiento</div>
                             </div>
                             <div class="badge">$2,800</div>
                         </div>
-                        <hr>
+                        <hr style="margin:10px 0">
                         <ul>
                             <li>Alcance: 2–3 meses</li>
                             <li>Equipo: 2 devs + PM + QA</li>
@@ -145,16 +111,19 @@
                             <li>2 despliegues a producción + monitoreo básico</li>
                             <li>Soporte: 1 mes</li>
                         </ul>
+                        <div style="margin-top:10px"><a
+                                href="mailto:ventas@codetech.com?subject=Plan%20Professional">Contactar para
+                                contratar</a></div>
                     </div>
 
                     <div class="card">
                         <div style="display:flex;justify-content:space-between;align-items:center">
                             <div><strong>Enterprise</strong>
-                                <div class="muted">Soluciones corporativas a medida</div>
+                                <div style="color:#6b7280">Soluciones corporativas a medida</div>
                             </div>
                             <div class="badge">Desde $8,500</div>
                         </div>
-                        <hr>
+                        <hr style="margin:10px 0">
                         <ul>
                             <li>Alcance: según especificaciones</li>
                             <li>Equipo dedicado (devs, arquitecto, PM, QA)</li>
@@ -162,15 +131,18 @@
                             <li>SLA, soporte 24/7 y auditorías de seguridad</li>
                             <li>Formación y transferencia de conocimiento</li>
                         </ul>
+                        <div style="margin-top:10px"><a
+                                href="mailto:ventas@codetech.com?subject=Plan%20Enterprise">Solicitar propuesta</a>
+                        </div>
                     </div>
                 </div>
             </section>
 
-            <section class="card">
+            <section class="card" style="margin-top:12px">
                 <h2 id="starter">¿Qué incluye cada proyecto?</h2>
                 <p class="muted">Cada plan incluye: análisis de requisitos, documentación mínima del proyecto, entrega
                     de código fuente y reunión de lanzamiento.</p>
-                <ul>
+                <ul style="margin-top:8px">
                     <li><strong>Fases:</strong> Descubrimiento → Diseño → Desarrollo → Pruebas → Lanzamiento.</li>
                     <li><strong>Gestión:</strong> Tablero de tareas, reuniones semanales y entregables definidos por
                         sprint.</li>
@@ -192,22 +164,21 @@
                 </div>
             </section>
 
-            <section class="card faq">
-                <h3>Contacto</h3>
-                <div>
-                    <strong>Hablemos de tu proyecto</strong>
-                    <p>Sí. Usamos Sprints y control de alcance; cambios fuera del alcance se cotizan
-                        aparte.</p>
-                    <div>
-                        <a href="https://wa.me/50374130924?text=Hola%20Codetech,%20quisiera%20más%20información">Contactar
-                            por WhatsApp</a>
-                    </div>
-                </div>
+            <section class="card" style="margin-top:12px">
+                <h3>Checklist antes de contratar</h3>
+                <ol>
+                    <li>Tener objetivos claros: qué problema resuelve el producto.</li>
+                    <li>Priorizar funcionalidades por MVP.</li>
+                    <li>Definir timelines y presupuesto aproximado.</li>
+                </ol>
+                <div style="margin-top:10px"><a
+                        href="mailto:ventas@codetech.com?subject=Checklist%20Preparaci%C3%B3n">Enviar checklist y
+                        solicitar llamada</a></div>
             </section>
-            <header>
-            </header>
+
         </main>
-        <footer>© Codetech · richdevtest17@gmail.com · +503 7413 0924</footer>
+
+        <footer style="margin-top:18px;color:#6b7280">© Codetech · ventas@codetech.com · +503 7000 0000</footer>
     </div>
 </body>
 
