@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Vacaciones - Código de Trabajo El Salvador</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #34495e;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+        
+        .calculator-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .calculator-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .input-section {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .result-section {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+        }
+        
+        .error-message {
+            color: var(--accent-color);
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+        
+        .btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .result-box {
+            background-color: var(--light-color);
+            padding: 20px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        
+        .result-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            text-align: center;
+            margin: 15px 0;
+        }
+        
+        .formula-box {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-left: 4px solid var(--secondary-color);
+            margin: 20px 0;
+            font-family: monospace;
+        }
+        
+        .legal-section {
+            background-color: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .legal-section h2 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .legal-text {
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            line-height: 1.8;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        .info-icon {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            background-color: var(--secondary-color);
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 18px;
+            font-size: 12px;
+            margin-left: 5px;
+            cursor: help;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Calculadora de Vacaciones</h1>
+            <p class="subtitle">Según el Código de Trabajo de El Salvador</p>
+        </header>
+        
+        <div class="calculator-container">
+            <div class="input-section">
+                <h2>Datos para el cálculo</h2>
+                <form id="vacation-form">
+                    <div class="form-group">
+                        <label for="salary">Salario mensual (USD)</label>
+                        <input type="text" id="salary" placeholder="Ej: 500.00">
+                        <div class="error-message" id="salary-error">Ingrese un valor numérico válido</div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="months-worked">Meses trabajados</label>
+                        <select id="months-worked">
+                            <option value="1">1 mes</option>
+                            <option value="2">2 meses</option>
+                            <option value="3">3 meses</option>
+                            <option value="4">4 meses</option>
+                            <option value="5">5 meses</option>
+                            <option value="6">6 meses</option>
+                            <option value="7">7 meses</option>
+                            <option value="8">8 meses</option>
+                            <option value="9">9 meses</option>
+                            <option value="10">10 meses</option>
+                            <option value="11">11 meses</option>
+                            <option value="12" selected>12 meses</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="days-worked">Días trabajados en el último mes <span class="info-icon" title="Si trabajó menos de un mes completo, ingrese la cantidad de días trabajados">?</span></label>
+                        <input type="number" id="days-worked" min="1" max="30" value="30">
+                        <div class="error-message" id="days-error">Ingrese un valor entre 1 y 30</div>
+                    </div>
+                    
+                    <button type="button" id="calculate-btn" class="btn">Calcular Vacaciones</button>
+                </form>
+            </div>
+            
+            <div class="result-section">
+                <h2>Resultado del cálculo</h2>
+                <div class="result-box">
+                    <p>Monto de vacaciones calculado:</p>
+                    <div class="result-value" id="result-value">$0.00 USD</div>
+                    <p>Este monto corresponde al pago de días de vacaciones según el tiempo trabajado.</p>
+                </div>
+                
+                <h3>Fórmula aplicada</h3>
+                <div class="formula-box">
+                    <p>Salario diario = Salario mensual / 30</p>
+                    <p>Días de vacaciones = (Meses trabajados × 15) / 12</p>
+                    <p>Monto de vacaciones = Salario diario × Días de vacaciones</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="legal-section">
+            <h2>Base Legal - Código de Trabajo de El Salvador</h2>
+            <div class="legal-text">
+                <p><strong>Artículo 177.</strong> Después de cada año de trabajo continuo al servicio de un mismo patrono, el trabajador tendrá derecho a quince días de vacaciones remuneradas, que le serán concedidos en la época que convenga a los intereses del trabajador y a las necesidades del servicio.</p>
+                
+                <p><strong>Artículo 178.</strong> Las vacaciones se remunerarán con base en el salario promedio de las últimas treinta semanas de trabajo, y el pago deberá hacerse antes de que el trabajador salga de vacaciones.</p>
+                
+                <p><strong>Artículo 179.</strong> El período de vacaciones deberá ser continuo y no podrá ser fraccionado, salvo acuerdo entre las partes. La duración mínima de cada fracción será de seis días.</p>
+                
+                <p><strong>Artículo 180.</strong> El trabajador que por cualquier causa termine la relación de trabajo, tendrá derecho a que se le pague la remuneración correspondiente al período de vacaciones que hubiere devengado, en proporción al tiempo de servicios prestados, calculado a razón de un día y cuarto por cada mes de trabajo.</p>
+                
+                <p><strong>Artículo 181.</strong> El derecho a vacaciones es irrenunciable. Cualquier convenio en contrario se tendrá por no escrito.</p>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Calculadora desarrollada para fines educativos - Código de Trabajo de El Salvador</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const calculateBtn = document.getElementById('calculate-btn');
+            const salaryInput = document.getElementById('salary');
+            const monthsWorkedSelect = document.getElementById('months-worked');
+            const daysWorkedInput = document.getElementById('days-worked');
+            const resultValue = document.getElementById('result-value');
+            const salaryError = document.getElementById('salary-error');
+            const daysError = document.getElementById('days-error');
+            
+            // Validar entrada de salario
+            salaryInput.addEventListener('input', function() {
+                const value = salaryInput.value;
+                const numericValue = parseFloat(value.replace(/[^0-9.]/g, ''));
+                
+                if (isNaN(numericValue) || numericValue <= 0) {
+                    salaryError.style.display = 'block';
+                    salaryInput.style.borderColor = '#e74c3c';
+                } else {
+                    salaryError.style.display = 'none';
+                    salaryInput.style.borderColor = '#ddd';
+                    salaryInput.value = numericValue.toFixed(2);
+                }
+            });
+            
+            // Validar días trabajados
+            daysWorkedInput.addEventListener('input', function() {
+                const value = parseInt(daysWorkedInput.value);
+                
+                if (value < 1 || value > 30 || isNaN(value)) {
+                    daysError.style.display = 'block';
+                    daysWorkedInput.style.borderColor = '#e74c3c';
+                } else {
+                    daysError.style.display = 'none';
+                    daysWorkedInput.style.borderColor = '#ddd';
+                }
+            });
+            
+            // Calcular vacaciones
+            calculateBtn.addEventListener('click', function() {
+                // Validar datos antes de calcular
+                const salary = parseFloat(salaryInput.value);
+                const monthsWorked = parseInt(monthsWorkedSelect.value);
+                const daysWorked = parseInt(daysWorkedInput.value);
+                
+                if (isNaN(salary) || salary <= 0) {
+                    salaryError.style.display = 'block';
+                    salaryInput.style.borderColor = '#e74c3c';
+                    return;
+                }
+                
+                if (daysWorked < 1 || daysWorked > 30) {
+                    daysError.style.display = 'block';
+                    daysWorkedInput.style.borderColor = '#e74c3c';
+                    return;
+                }
+                
+                // Calcular vacaciones
+                const dailySalary = salary / 30;
+                let vacationDays;
+                
+                if (monthsWorked === 12) {
+                    // Año completo: 15 días de vacaciones
+                    vacationDays = 15;
+                } else {
+                    // Cálculo proporcional según el Artículo 180
+                    vacationDays = (monthsWorked * 15) / 12;
+                    
+                    // Ajustar por días trabajados en el último mes
+                    if (daysWorked < 30) {
+                        vacationDays += (daysWorked * 15 / 30) / 12;
+                    }
+                }
+                
+                const vacationAmount = dailySalary * vacationDays;
+                
+                // Mostrar resultado
+                resultValue.textContent = `$${vacationAmount.toFixed(2)} USD`;
+            });
+        });
+    </script>
+</body>
+</html>
