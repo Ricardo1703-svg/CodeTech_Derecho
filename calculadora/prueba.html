@@ -102,17 +102,25 @@
             <p class="small">Introduce el salario en USD y el tiempo trabajado. La calculadora aplica las reglas del
                 Código de Trabajo de El Salvador (Art. 177 y Art. 183) para el pago de vacaciones.</p>
 
+            <label>Tipo de vacaciones</label>
+            <select id="tipoVacaciones">
+                <option value="integras">Vacaciones íntegras (15 días completos, después de 1 año)</option>
+                <option value="proporcionales">Vacaciones proporcionales (menos de 1 año trabajado)</option>
+            </select>
+
             <label>Salario (USD, ingresos promedio mensual o por periodo)</label>
             <input id="salario" inputmode="decimal" pattern="[0-9]+([\.,][0-9]{1,2})?" placeholder="Ej: 500.00">
 
-            <div class="row">
-                <div>
-                    <label>Meses trabajados</label>
-                    <input id="meses" type="number" min="0" max="60" placeholder="Ej: 12">
-                </div>
-                <div>
-                    <label>Días trabajados adicionales</label>
-                    <input id="dias" type="number" min="0" max="30" placeholder="Ej: 15">
+            <div id="tiempoProporcional" style="display:none">
+                <div class="row">
+                    <div>
+                        <label>Meses trabajados</label>
+                        <input id="meses" type="number" min="0" max="60" placeholder="Ej: 12">
+                    </div>
+                    <div>
+                        <label>Días trabajados adicionales</label>
+                        <input id="dias" type="number" min="0" max="30" placeholder="Ej: 15">
+                    </div>
                 </div>
             </div>
 
@@ -155,11 +163,18 @@
     <script>
         function toNumber(v) { if (typeof v === 'number') return v; if (!v) return NaN; v = String(v).replace(',', '.').replace(/[^0-9\.\-]/g, ''); return parseFloat(v) }
 
+        // Mostrar u ocultar campos de tiempo proporcional
+        const tipoVacaciones = document.getElementById('tipoVacaciones');
+        tipoVacaciones.addEventListener('change', () => {
+            document.getElementById('tiempoProporcional').style.display = tipoVacaciones.value === 'proporcionales' ? 'block' : 'none';
+        });
+
         document.getElementById('calcular').addEventListener('click', () => {
             const salarioRaw = document.getElementById('salario').value.trim();
             const salario = toNumber(salarioRaw);
-            const meses = parseInt(document.getElementById('meses').value, 10) || 0;
-            const diasExtra = parseInt(document.getElementById('dias').value, 10) || 0;
+            const tipo = document.getElementById('tipoVacaciones').value;
+            const meses = parseInt(document.getElementById('meses')?.value, 10) || 0;
+            const diasExtra = parseInt(document.getElementById('dias')?.value, 10) || 0;
             const diasSemana = parseInt(document.getElementById('diasSemana').value, 10);
             const salarioTipo = document.getElementById('salarioTipo').value;
             const out = document.getElementById('resultado');
@@ -169,12 +184,23 @@
 
             // Validaciones
             if (isNaN(salario) || salario <= 0) { resumen.innerHTML = '<span class="error">Introduce un salario válido en USD (solo números).</span>'; out.style.display = 'block'; formulaEl.textContent = ''; articuloEl.textContent = ''; return }
-            if (meses <= 0 && diasExtra <= 0) { resumen.innerHTML = '<span class="error">Introduce al menos meses o días trabajados.</span>'; out.style.display = 'block'; formulaEl.textContent = ''; articuloEl.textContent = ''; return }
+            if (tipo === 'proporcionales' && (meses <= 0 && diasExtra <= 0)) {
+                resumen.innerHTML = '<span class="error">Introduce al menos meses o días trabajados.</span>';
+                out.style.display = 'block'; formulaEl.textContent = ''; articuloEl.textContent = ''; return;
+            }
 
-            // Determinar tiempo proporcional (meses + fracción de mes por días)
-            const proporcion = Math.min((meses + (diasExtra / 30)), 12) / 12;
-            const diasVacacionesCompleto = 15; // días hábiles según Código
-            const diasVacaciones = Math.round((diasVacacionesCompleto * proporcion) * 100) / 100;
+            const diasVacacionesCompleto = 15;
+            let diasVacaciones;
+            let detalleTiempo = "";
+
+            if (tipo === 'integras') {
+                diasVacaciones = diasVacacionesCompleto;
+                detalleTiempo = "(>= 1 año de trabajo)";
+            } else {
+                const proporcion = Math.min((meses + (diasExtra / 30)), 12) / 12;
+                diasVacaciones = Math.round((diasVacacionesCompleto * proporcion) * 100) / 100;
+                detalleTiempo = `${meses} meses y ${diasExtra} días`;
+            }
 
             // Calcular salario diario
             let salarioDiario;
@@ -184,15 +210,13 @@
                 salarioDiario = salario / 30;
             }
 
-            // Remuneración vacacional: salarioDiario * diasVacaciones + 30%
             const pagoBase = salarioDiario * diasVacaciones;
             const recargo = pagoBase * 0.30;
             const totalVacaciones = Math.round((pagoBase + recargo) * 100) / 100;
 
-            // Mostrar resultados
-            resumen.innerHTML = `Tiempo trabajado: <strong>${meses} meses ${diasExtra} días</strong>\nDías de vacaciones (proporcionales): <strong>${diasVacaciones}</strong> días\nSalario diario aproximado: <strong>$${salarioDiario.toFixed(2)} USD</strong>\nPago base por vacaciones: <strong>$${pagoBase.toFixed(2)} USD</strong>\nRecargo (30%): <strong>$${recargo.toFixed(2)} USD</strong>\n\n<strong>Total a pagar antes de ajustes: $${totalVacaciones.toFixed(2)} USD</strong>`;
+            resumen.innerHTML = `Tipo de vacaciones: <strong>${tipo === 'integras' ? 'Íntegras' : 'Proporcionales'}</strong> ${detalleTiempo}<br>Días de vacaciones: <strong>${diasVacaciones}</strong> días<br>Salario diario aproximado: <strong>$${salarioDiario.toFixed(2)} USD</strong><br>Pago base por vacaciones: <strong>$${pagoBase.toFixed(2)} USD</strong><br>Recargo (30%): <strong>$${recargo.toFixed(2)} USD</strong><br><br><strong>Total a pagar antes de ajustes: $${totalVacaciones.toFixed(2)} USD</strong>`;
 
-            formulaEl.textContent = `1) Determinar días de vacaciones: dias = 15 * ((meses + dias/30) / 12)\n2) Salario diario (aprox.): salario_diario = salario_mensual / 30\n3) Pago base = salario_diario * dias\n4) Recargo = 30% * Pago base\n5) Total = Pago base + Recargo\n\nSustituido:\nDias = 15 * ((${meses}+${diasExtra}/30)/12) = ${diasVacaciones}\nSalario_diario = ${salario.toFixed(2)} / 30 = ${salarioDiario.toFixed(2)}\nPago_base = ${salarioDiario.toFixed(2)} * ${diasVacaciones} = ${pagoBase.toFixed(2)}\nRecargo = 0.30 * ${pagoBase.toFixed(2)} = ${recargo.toFixed(2)}\nTotal = ${totalVacaciones.toFixed(2)} USD`;
+            formulaEl.textContent = `1) Determinar días de vacaciones: dias = 15 ${tipo === 'proporcionales' ? '* ((meses + dias/30)/12)' : ''}\n2) Salario diario (aprox.): salario_diario = salario_mensual / 30\n3) Pago base = salario_diario * dias\n4) Recargo = 30% * Pago base\n5) Total = Pago base + Recargo`;
 
             articuloEl.textContent = `Art. 177: Después de un año de trabajo continuo... los trabajadores tendrán derecho a un periodo de vacaciones cuya duración será de quince días, los cuales serán remunerados con una prestación equivalente al salario ordinario correspondiente a dicho lapso más un 30% del mismo.\n\nArt. 183: Para calcular la remuneración... se tomará en cuenta: (1) salario básico vigente cuando se estipule por unidad de tiempo; (2) o el salario promedio resultante de dividir los salarios ordinarios devengados durante los seis meses anteriores entre el número de días laborables comprendidos en dicho periodo.`;
 
@@ -200,4 +224,5 @@
         });
     </script>
 </body>
+
 </html>
