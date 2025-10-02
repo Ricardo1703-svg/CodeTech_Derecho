@@ -1,0 +1,86 @@
+ :root {
+            --bg: #f7f9fc;
+            --card: #fff;
+            --accent: #0b5ed7
+        }
+
+        body {
+            font-family: Inter, system-ui, Segoe UI, Arial;
+            background: var(--bg);
+            margin: 0;
+            padding: 24px;
+            color: #222
+        }
+
+        .container {
+            max-width: 820px;
+            margin: 0 auto
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 6px 22px rgba(20, 30, 60, 0.06)
+        }
+
+        h1 {
+            margin: 0 0 8px;
+            font-size: 20px
+        }
+
+        label {
+            display: block;
+            margin-top: 12px;
+            font-size: 14px
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #d6d9e6;
+            margin-top: 6px;
+            font-size: 15px
+        }
+
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px
+        }
+
+        .btn {
+            background: var(--accent);
+            color: #fff;
+            padding: 10px 14px;
+            border-radius: 10px;
+            border: 0;
+            margin-top: 16px;
+            cursor: pointer
+        }
+
+        .output {
+            margin-top: 18px;
+            padding: 12px;
+            border-radius: 10px;
+            background: #f1f5ff
+        }
+
+        pre {
+            white-space: pre-wrap;
+            background: #f8f9fb;
+            padding: 12px;
+            border-radius: 8px
+        }
+
+        .small {
+            font-size: 13px;
+            color: #555
+        }
+
+        .error {
+            color: #b00020;
+            font-weight: 600
+        }
