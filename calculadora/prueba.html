@@ -4,225 +4,75 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Calculadora de Vacaciones - Código de Trabajo El Salvador</title>
-    <style>
-        :root {
-            --bg: #f7f9fc;
-            --card: #fff;
-            --accent: #0b5ed7
-        }
-
-        body {
-            font-family: Inter, system-ui, Segoe UI, Arial;
-            background: var(--bg);
-            margin: 0;
-            padding: 24px;
-            color: #222
-        }
-
-        .container {
-            max-width: 820px;
-            margin: 0 auto
-        }
-
-        .card {
-            background: var(--card);
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 6px 22px rgba(20, 30, 60, 0.06)
-        }
-
-        h1 {
-            margin: 0 0 8px;
-            font-size: 20px
-        }
-
-        label {
-            display: block;
-            margin-top: 12px;
-            font-size: 14px
-        }
-
-        input,
-        select {
-            width: 100%;
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid #d6d9e6;
-            margin-top: 6px;
-            font-size: 15px
-        }
-
-        .row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px
-        }
-
-        .btn {
-            background: var(--accent);
-            color: #fff;
-            padding: 10px 14px;
-            border-radius: 10px;
-            border: 0;
-            margin-top: 16px;
-            cursor: pointer
-        }
-
-        .output {
-            margin-top: 18px;
-            padding: 12px;
-            border-radius: 10px;
-            background: #f1f5ff
-        }
-
-        pre {
-            white-space: pre-wrap;
-            background: #f8f9fb;
-            padding: 12px;
-            border-radius: 8px
-        }
-
-        .small {
-            font-size: 13px;
-            color: #555
-        }
-
-        .error {
-            color: #b00020;
-            font-weight: 600
-        }
-    </style>
+    <title>Calculadora de Vacaciones - El Salvador</title>
+    <link rel="stylesheet" href="estilos.css">
 </head>
 
 <body>
-    <div class="container">
-        <div class="card">
-            <h1>Calculadora de Vacaciones (El Salvador)</h1>
-            <p class="small">Introduce el salario en USD y el tiempo trabajado. La calculadora aplica las reglas del
-                Código de Trabajo de El Salvador (Art. 177 y Art. 183) para el pago de vacaciones.</p>
+    <header>
+        <img src="logo.jpg" alt="Logo">
+        <h1>Calculadora de Vacaciones (El Salvador)</h1>
+    </header>
+    <div class="layout">
+        <!-- Barra lateral (inputs) -->
+        <aside class="sidebar">
+            <h2>Datos de entrada</h2>
 
             <label>Tipo de vacaciones</label>
             <select id="tipoVacaciones">
-                <option value="integras">Vacaciones íntegras (15 días completos, después de 1 año)</option>
-                <option value="proporcionales">Vacaciones proporcionales (menos de 1 año trabajado)</option>
+                <option value="integras">Vacaciones íntegras</option>
+                <option value="proporcionales">Vacaciones proporcionales</option>
             </select>
 
-            <label>Salario (USD, ingresos promedio mensual o por periodo)</label>
-            <input id="salario" inputmode="decimal" pattern="[0-9]+([\.,][0-9]{1,2})?" placeholder="Ej: 500.00">
+            <label>Salario (USD)</label>
+            <input id="salario" placeholder="Ej: 500.00">
 
             <div id="tiempoProporcional" style="display:none">
-                <div class="row">
-                    <div>
-                        <label>Meses trabajados</label>
-                        <input id="meses" type="number" min="0" max="60" placeholder="Ej: 12">
-                    </div>
-                    <div>
-                        <label>Días trabajados adicionales</label>
-                        <input id="dias" type="number" min="0" max="30" placeholder="Ej: 15">
-                    </div>
-                </div>
+                <label>Meses trabajados</label>
+                <input id="meses" type="number" min="0" max="60" placeholder="Ej: 12">
+
+                <label>Días trabajados adicionales</label>
+                <input id="dias" type="number" min="0" max="30" placeholder="Ej: 15">
             </div>
 
-            <div class="row">
-                <div>
-                    <label>Días laborales por semana</label>
-                    <select id="diasSemana">
-                        <option value="5">5 días hábiles</option>
-                        <option value="6">6 días</option>
-                        <option value="7">7 días</option>
-                    </select>
-                </div>
-                <div>
-                    <label>¿Salario definido por unidad de tiempo (sí/no)?</label>
-                    <select id="salarioTipo">
-                        <option value="unidad">Sí (usar salario básico actual)</option>
-                        <option value="promedio">No (usar promedio según Art. 183)</option>
-                    </select>
-                </div>
-            </div>
+            <label>Días laborales por semana</label>
+            <select id="diasSemana">
+                <option value="5">5 días</option>
+                <option value="6">6 días</option>
+                <option value="7">7 días</option>
+            </select>
+
+            <label>¿Salario definido por unidad de tiempo?</label>
+            <select id="salarioTipo">
+                <option value="unidad">Sí</option>
+                <option value="promedio">No</option>
+            </select>
 
             <button class="btn" id="calcular">Calcular vacaciones</button>
+        </aside>
 
-            <div class="output" id="resultado" aria-live="polite" style="display:none">
-                <h3>Resultado</h3>
-                <div id="resumen"></div>
-                <h4>Fórmula aplicada</h4>
-                <pre id="formula"></pre>
-                <h4>Base legal (extracto)</h4>
-                <pre id="articulo"></pre>
-                <p class="small">Fuente: Código de Trabajo de la República de El Salvador (Art. 177, 183).</p>
+        <!-- Resultados -->
+        <main class="content">
+            <div class="card">
+                <p class="small">La calculadora aplica el Código de Trabajo (Art. 177 y 183).</p>
+
+                <div class="output" id="resultado" style="display:none">
+                    <h3>Resultado</h3>
+                    <div id="resumen"></div>
+                    <h4>Fórmula aplicada</h4>
+                    <pre id="formula"></pre>
+                    <h4>Base legal</h4>
+                    <pre id="articulo"></pre>
+                </div>
+
+                <p class="small">Nota: Es un cálculo estimado. Casos especiales pueden variar.</p>
             </div>
-
-            <p class="small" style="margin-top:12px">Nota: la calculadora entrega un estimado acorde con las reglas del
-                Código; casos especiales (alojamiento, alimentación, fraccionamiento de vacaciones, colectivos o
-                convenios) pueden cambiar el resultado.</p>
-        </div>
+        </main>
     </div>
-
-    <script>
-        function toNumber(v) { if (typeof v === 'number') return v; if (!v) return NaN; v = String(v).replace(',', '.').replace(/[^0-9\.\-]/g, ''); return parseFloat(v) }
-
-        // Mostrar u ocultar campos de tiempo proporcional
-        const tipoVacaciones = document.getElementById('tipoVacaciones');
-        tipoVacaciones.addEventListener('change', () => {
-            document.getElementById('tiempoProporcional').style.display = tipoVacaciones.value === 'proporcionales' ? 'block' : 'none';
-        });
-
-        document.getElementById('calcular').addEventListener('click', () => {
-            const salarioRaw = document.getElementById('salario').value.trim();
-            const salario = toNumber(salarioRaw);
-            const tipo = document.getElementById('tipoVacaciones').value;
-            const meses = parseInt(document.getElementById('meses')?.value, 10) || 0;
-            const diasExtra = parseInt(document.getElementById('dias')?.value, 10) || 0;
-            const diasSemana = parseInt(document.getElementById('diasSemana').value, 10);
-            const salarioTipo = document.getElementById('salarioTipo').value;
-            const out = document.getElementById('resultado');
-            const resumen = document.getElementById('resumen');
-            const formulaEl = document.getElementById('formula');
-            const articuloEl = document.getElementById('articulo');
-
-            // Validaciones
-            if (isNaN(salario) || salario <= 0) { resumen.innerHTML = '<span class="error">Introduce un salario válido en USD (solo números).</span>'; out.style.display = 'block'; formulaEl.textContent = ''; articuloEl.textContent = ''; return }
-            if (tipo === 'proporcionales' && (meses <= 0 && diasExtra <= 0)) {
-                resumen.innerHTML = '<span class="error">Introduce al menos meses o días trabajados.</span>';
-                out.style.display = 'block'; formulaEl.textContent = ''; articuloEl.textContent = ''; return;
-            }
-
-            const diasVacacionesCompleto = 15;
-            let diasVacaciones;
-            let detalleTiempo = "";
-
-            if (tipo === 'integras') {
-                diasVacaciones = diasVacacionesCompleto;
-                detalleTiempo = "(>= 1 año de trabajo)";
-            } else {
-                const proporcion = Math.min((meses + (diasExtra / 30)), 12) / 12;
-                diasVacaciones = Math.round((diasVacacionesCompleto * proporcion) * 100) / 100;
-                detalleTiempo = `${meses} meses y ${diasExtra} días`;
-            }
-
-            // Calcular salario diario
-            let salarioDiario;
-            if (salarioTipo === 'unidad') {
-                salarioDiario = salario / 30;
-            } else {
-                salarioDiario = salario / 30;
-            }
-
-            const pagoBase = salarioDiario * diasVacaciones;
-            const recargo = pagoBase * 0.30;
-            const totalVacaciones = Math.round((pagoBase + recargo) * 100) / 100;
-
-            resumen.innerHTML = `Tipo de vacaciones: <strong>${tipo === 'integras' ? 'Íntegras' : 'Proporcionales'}</strong> ${detalleTiempo}<br>Días de vacaciones: <strong>${diasVacaciones}</strong> días<br>Salario diario aproximado: <strong>$${salarioDiario.toFixed(2)} USD</strong><br>Pago base por vacaciones: <strong>$${pagoBase.toFixed(2)} USD</strong><br>Recargo (30%): <strong>$${recargo.toFixed(2)} USD</strong><br><br><strong>Total a pagar antes de ajustes: $${totalVacaciones.toFixed(2)} USD</strong>`;
-
-            formulaEl.textContent = `1) Determinar días de vacaciones: dias = 15 ${tipo === 'proporcionales' ? '* ((meses + dias/30)/12)' : ''}\n2) Salario diario (aprox.): salario_diario = salario_mensual / 30\n3) Pago base = salario_diario * dias\n4) Recargo = 30% * Pago base\n5) Total = Pago base + Recargo`;
-
-            articuloEl.textContent = `Art. 177: Después de un año de trabajo continuo... los trabajadores tendrán derecho a un periodo de vacaciones cuya duración será de quince días, los cuales serán remunerados con una prestación equivalente al salario ordinario correspondiente a dicho lapso más un 30% del mismo.\n\nArt. 183: Para calcular la remuneración... se tomará en cuenta: (1) salario básico vigente cuando se estipule por unidad de tiempo; (2) o el salario promedio resultante de dividir los salarios ordinarios devengados durante los seis meses anteriores entre el número de días laborables comprendidos en dicho periodo.`;
-
-            out.style.display = 'block';
-        });
-    </script>
+    <footer>
+        © <span id="year"></span> Codetech. Todos los derechos reservados.
+    </footer>
+    <script src="script.js"></script>
 </body>
 
 </html>
