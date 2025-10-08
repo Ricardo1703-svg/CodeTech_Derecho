@@ -65,7 +65,20 @@ document.getElementById('calcular').addEventListener('click', () => {
 
     formulaEl.textContent = `1) Días = 15 ${tipo === 'proporcionales' ? '* ((meses + dias/30)/12)' : ''}\n2) Salario diario = salario / 30\n3) Pago base = salario_diario * dias\n4) Recargo = 30% * Pago base\n5) Total = Pago base + Recargo`;
 
-    articuloEl.textContent = `Art. 177: Derecho a 15 días de vacaciones remuneradas con +30%.\nArt. 183: Cálculo según salario básico o promedio de 6 meses previos.`;
+    articuloEl.textContent = `Art. 177.- Después de un año de trabajo continuo en la misma empresa o establecimiento o bajo la
+    dependencia de un mismo patrono, los trabajadores tendrán derecho a un período de vacaciones cuya duración
+    será de quince días, los cuales serán remunerados con una prestación equivalente al salario ordinario
+    correspondiente a dicho lapso más un 30% del mismo.
+
+    \n Art. 183.- Para calcular la remuneración que el trabajador debe recibir en concepto de prestación por
+vacaciones, se tomará en cuenta:
+
+    1º) El salario básico que devengue a la fecha en que deba gozar de ellas, cuando el salario hubiere sido
+    estipulado por unidad de tiempo;
+
+    2º) El salario básico que resulte de dividir los salarios ordinarios que el trabajador haya devengado durante
+    los seis meses anteriores a la fecha en que deba gozar de ellas, entre el número de días laborables
+    comprendidos en dicho período, cuando se trate de cualquier otra forma de estipulación del salario.`;
 
     out.style.display = 'block';
 });
