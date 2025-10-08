@@ -71,7 +71,7 @@ document.getElementById('calcular').addEventListener('click', () => {
     correspondiente a dicho lapso más un 30% del mismo.
 
     \n Art. 183.- Para calcular la remuneración que el trabajador debe recibir en concepto de prestación por
-vacaciones, se tomará en cuenta:
+    vacaciones, se tomará en cuenta:
 
     1º) El salario básico que devengue a la fecha en que deba gozar de ellas, cuando el salario hubiere sido
     estipulado por unidad de tiempo;
