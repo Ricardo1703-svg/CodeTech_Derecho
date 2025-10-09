@@ -1,9 +1,18 @@
+// Convierte a número (acepta punto o coma)
 function toNumber(v) {
     if (typeof v === 'number') return v;
     if (!v) return NaN;
     v = String(v).replace(',', '.').replace(/[^0-9\.\-]/g, '');
     return parseFloat(v);
 }
+
+// 🔒 Restringir solo números, punto o coma en el campo salario
+const salarioInput = document.getElementById('salario');
+salarioInput.addEventListener('input', (e) => {
+    e.target.value = e.target.value
+        .replace(/[^\d.,]/g, '')  // permite solo números, punto o coma
+        .replace(/(\..*)\./g, '$1'); // evita escribir más de un punto
+});
 
 // Mostrar u ocultar campos proporcionales
 const tipoVacaciones = document.getElementById('tipoVacaciones');
@@ -28,11 +37,18 @@ document.getElementById('calcular').addEventListener('click', () => {
     // Validaciones
     if (isNaN(salario) || salario <= 0) {
         resumen.innerHTML = '<span class="error">Introduce un salario válido.</span>';
-        out.style.display = 'block'; formulaEl.textContent = ''; articuloEl.textContent = ''; return;
+        out.style.display = 'block';
+        formulaEl.textContent = '';
+        articuloEl.textContent = '';
+        return;
     }
+
     if (tipo === 'proporcionales' && (meses <= 0 && diasExtra <= 0)) {
         resumen.innerHTML = '<span class="error">Introduce al menos meses o días trabajados.</span>';
-        out.style.display = 'block'; formulaEl.textContent = ''; articuloEl.textContent = ''; return;
+        out.style.display = 'block';
+        formulaEl.textContent = '';
+        articuloEl.textContent = '';
+        return;
     }
 
     const diasVacacionesCompleto = 15;
@@ -63,22 +79,26 @@ document.getElementById('calcular').addEventListener('click', () => {
         Recargo (30%): <strong>$${recargo.toFixed(2)}</strong><br><br>
         <strong>Total: $${totalVacaciones.toFixed(2)}</strong>`;
 
-    formulaEl.textContent = `1) Días = 15 ${tipo === 'proporcionales' ? '* ((meses + dias/30)/12)' : ''}\n2) Salario diario = salario / 30\n3) Pago base = salario_diario * dias\n4) Recargo = 30% * Pago base\n5) Total = Pago base + Recargo`;
+    formulaEl.textContent = `1) Días = 15 ${tipo === 'proporcionales' ? '* ((meses + dias/30)/12)' : ''}
+2) Salario diario = salario / 30
+3) Pago base = salario_diario * días
+4) Recargo = 30% * Pago base
+5) Total = Pago base + Recargo`;
 
     articuloEl.textContent = `Art. 177.- Después de un año de trabajo continuo en la misma empresa o establecimiento o bajo la
-    dependencia de un mismo patrono, los trabajadores tendrán derecho a un período de vacaciones cuya duración
-    será de quince días, los cuales serán remunerados con una prestación equivalente al salario ordinario
-    correspondiente a dicho lapso más un 30% del mismo.
+dependencia de un mismo patrono, los trabajadores tendrán derecho a un período de vacaciones cuya duración
+será de quince días, los cuales serán remunerados con una prestación equivalente al salario ordinario
+correspondiente a dicho lapso más un 30% del mismo.
 
-    \n Art. 183.- Para calcular la remuneración que el trabajador debe recibir en concepto de prestación por
-    vacaciones, se tomará en cuenta:
+Art. 183.- Para calcular la remuneración que el trabajador debe recibir en concepto de prestación por
+vacaciones, se tomará en cuenta:
 
-    1º) El salario básico que devengue a la fecha en que deba gozar de ellas, cuando el salario hubiere sido
-    estipulado por unidad de tiempo;
+1º) El salario básico que devengue a la fecha en que deba gozar de ellas, cuando el salario hubiere sido
+estipulado por unidad de tiempo;
 
-    2º) El salario básico que resulte de dividir los salarios ordinarios que el trabajador haya devengado durante
-    los seis meses anteriores a la fecha en que deba gozar de ellas, entre el número de días laborables
-    comprendidos en dicho período, cuando se trate de cualquier otra forma de estipulación del salario.`;
+2º) El salario básico que resulte de dividir los salarios ordinarios que el trabajador haya devengado durante
+los seis meses anteriores a la fecha en que deba gozar de ellas, entre el número de días laborables
+comprendidos en dicho período, cuando se trate de cualquier otra forma de estipulación del salario.`;
 
     out.style.display = 'block';
 });
