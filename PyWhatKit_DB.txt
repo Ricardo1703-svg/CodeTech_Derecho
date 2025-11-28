@@ -1,0 +1,5 @@
+Date: 27/11/2025
+Time: 18:15
+Phone Number: +50360333751
+Message: Reporte del sensor30.00,18.00Enviado desde Python
+--------------------
