@@ -19,10 +19,15 @@ temp_actual = "N/A"
 hum_actual = "N/A"
 ultimo_guardado_timestamp = time()
 
+email_timer_counter = 0
+
+
 # ------------------ CONFIGURACIÓN SERIAL ------------------
+# Asegúrate de que el puerto COM y el baudrate sean correctos
 try:
     ser = serial.Serial('COM12', 9600)
 except serial.SerialException as e:
+    # Manejar el error si el puerto serial no se puede abrir
     messagebox.showerror("Error Serial", f"No se pudo abrir el puerto serial 'COM12':\n{e}")
     ser = None
 
@@ -36,23 +41,20 @@ try:
     client = MongoClient(MONGO_URI)
     db = client[DB_NAME]
     collection = db[COLLECTION_NAME]
-    client.admin.command('ping')
+    client.admin.command('ping') # Prueba la conexión
     MONGO_READY = True
 except Exception as e:
     messagebox.showerror("Error MongoDB", f"No se pudo conectar a MongoDB:\n{e}")
     MONGO_READY = False
 
-# ------------------ CONFIGURACIÓN EMAIL Y ALERTAS ------------------
+# ------------------ CONFIGURACIÓN EMAIL Y REPORTE AUTOMÁTICO ------------------
 EMAIL_USER = "richdevtest17@gmail.com"
-EMAIL_PASSWORD = "fpia lxgz iujn zzhm"
+EMAIL_PASSWORD = "LA QUE CREE JEJEJEJEJJEJEJEJEJ"
 SMTP_SERVER = "smtp.gmail.com"
 SMTP_PORT = 587
 
-EMAIL_ALERTA_FIJO = "ralvares961@gmail.com"
-
-# Umbrales para la alerta automática (ejemplo: si la temperatura supera 30°C)
-TEMP_MAX = 30.0
-ALERTA_ENVIADA = False
+# Correo fijo para reportes automáticos
+EMAIL_REPORTE_FIJO = "ralvares961@gmail.com"
 
 # ------------------ TKINTER SETUP ------------------
 root = tk.Tk()
@@ -67,6 +69,7 @@ x_coordinate = (screen_width/2) - (window_width/2)
 y_coordinate = (screen_height/2) - (window_height/2)
 root.geometry(f"{window_width}x{window_height}+{int(x_coordinate)}+{int(y_coordinate)}")
 
+# Configuración de la rejilla (grid) principal
 for i in range(2):
     root.grid_columnconfigure(i, weight=1)
     
@@ -85,7 +88,7 @@ etiqueta_temp = tk.Label(root, text="Temperatura (°C): Esperando...", font=('ca
 etiqueta_temp.grid(row=2, column=0, padx=5, pady=5, sticky="ew")
 
 etiqueta_hum = tk.Label(root, text="Humedad (%): Esperando...", font=('calibri', 12),
-                        background='#82c6ff', foreground='black', padx=10, pady=5)
+                       background='#82c6ff', foreground='black', padx=10, pady=5)
 etiqueta_hum.grid(row=2, column=1, padx=5, pady=5, sticky="ew")
 
 # ------------------ TABLA (Treeview) ------------------
@@ -110,12 +113,14 @@ tabla.grid(row=5, column=0, columnspan=2, padx=10, pady=5, sticky="nsew")
 # ------------------ FUNCIONES DE DATOS Y ACTUALIZACIÓN ------------------
 
 def actualizar_hora():
+    """Actualiza las etiquetas de hora y fecha, mostrando el día en español."""
     etiqueta_hora.config(text=strftime('%H:%M:%S %p'))
     etiqueta_fecha.config(text=strftime('%A, %d/%m/%Y').capitalize()) 
     root.after(1000, actualizar_hora)
 
 def leer_y_mostrar_datos():
-    global temp_actual, hum_actual, ALERTA_ENVIADA
+    """Lee datos del serial y actualiza las etiquetas de T/H (cada segundo)."""
+    global temp_actual, hum_actual
     
     if ser and ser.is_open:
         try:
@@ -129,10 +134,6 @@ def leer_y_mostrar_datos():
                 
                 etiqueta_temp.config(text=f"Temperatura (°C): {temp_actual}")
                 etiqueta_hum.config(text=f"Humedad (%): {hum_actual}")
-
-                # Lógica para restablecer la bandera de alerta si la T baja del umbral
-                if temp_actual != "N/A" and float(temp_actual) < TEMP_MAX:
-                    ALERTA_ENVIADA = False
             else:
                 etiqueta_temp.config(text="Temperatura (°C): Error de formato")
                 etiqueta_hum.config(text="Humedad (%): Error de formato")
@@ -152,6 +153,7 @@ def leer_y_mostrar_datos():
     root.after(1000, leer_y_mostrar_datos)
 
 def cargar_tabla():
+    """Carga los registros de MongoDB en la tabla Treeview."""
     if not MONGO_READY:
         return
         
@@ -168,6 +170,10 @@ def cargar_tabla():
 
 
 def guardar_datos(manual=True):
+    """
+    Guarda la última lectura de T/H en MongoDB.
+    Si se llama manualmente (por botón), muestra un messagebox.
+    """
     if not MONGO_READY:
         if manual:
             messagebox.showwarning("Advertencia", "No hay conexión a MongoDB. No se puede guardar.")
@@ -198,55 +204,64 @@ def guardar_datos(manual=True):
         if manual:
             messagebox.showerror("Error", f"No se pudo guardar en MongoDB:\n{e}")
 
-# ------------------ FUNCIÓN DE ENVÍO DE ALERTA AUTOMÁTICA ------------------
-def enviar_alerta_automatica():
-    global ALERTA_ENVIADA
+# ------------------ FUNCIÓN DE ENVÍO DE REPORTE AUTOMÁTICO (Cada 2 Minutos) ------------------
+def enviar_reporte_automatico():
+    """Envía un reporte periódico con la última lectura al correo fijo."""
     
-    if temp_actual == "N/A":
+    if temp_actual == "N/A" or hum_actual == "N/A":
         return
 
+    # 1. Preparar el contenido del correo
+    asunto = "Reporte Automático T/H"
+    
+    contenido = "Este es un reporte automático de las condiciones ambientales actuales:\n\n"
+    contenido += f"Temperatura: {temp_actual}°C\n"
+    contenido += f"Humedad: {hum_actual}%\n"
+    contenido += f"Fecha y Hora del reporte: {strftime('%d/%m/%Y')} - {strftime('%H:%M:%S %p')}\n"
+
     try:
-        temperatura = float(temp_actual)
-    except ValueError:
-        return # No es un número válido
+        # 2. Configurar y enviar el mensaje
+        mensaje = MIMEText(contenido)
+        mensaje["Subject"] = asunto
+        mensaje["From"] = EMAIL_USER
+        mensaje["To"] = EMAIL_REPORTE_FIJO # Usar la variable renombrada
 
-    if temperatura > TEMP_MAX and not ALERTA_ENVIADA:
-        asunto = f"ALERTA: Temperatura Máxima Excedida ({TEMP_MAX}°C)"
+        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+        server.starttls()
+        server.login(EMAIL_USER, EMAIL_PASSWORD)
+        server.sendmail(EMAIL_USER, EMAIL_REPORTE_FIJO, mensaje.as_string())
+        server.quit()
         
-        contenido = f"¡ATENCIÓN! La temperatura actual ({temperatura}°C) ha superado el umbral de {TEMP_MAX}°C.\n\n"
-        contenido += f"Humedad: {hum_actual}%\n"
-        contenido += f"Fecha y Hora del evento: {strftime('%d/%m/%Y')} - {strftime('%H:%M:%S %p')}\n"
+        print(f"Reporte automático enviado correctamente a {EMAIL_REPORTE_FIJO}.")
 
-        try:
-            mensaje = MIMEText(contenido)
-            mensaje["Subject"] = asunto
-            mensaje["From"] = EMAIL_USER
-            mensaje["To"] = EMAIL_ALERTA_FIJO
-
-            server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
-            server.starttls()
-            server.login(EMAIL_USER, EMAIL_PASSWORD)
-            server.sendmail(EMAIL_USER, EMAIL_ALERTA_FIJO, mensaje.as_string())
-            server.quit()
-            
-            ALERTA_ENVIADA = True
-            print(f"Alerta enviada correctamente a {EMAIL_ALERTA_FIJO}.")
-
-        except Exception as e:
-            print(f"Error al enviar la alerta automática: {e}")
-            # No mostrar messagebox para no interrumpir el flujo automático
-    elif temperatura <= TEMP_MAX:
-        ALERTA_ENVIADA = False
+    except Exception as e:
+        print(f"Error al enviar el reporte automático: {e}")
+        # No mostrar messagebox para no interrumpir el flujo automático
 
 
-# ------------------ TAREAS PERIÓDICAS (GUARDADO Y ALERTA) ------------------
-def ejecutar_tareas_periodicas():    
+# ------------------ TAREAS PERIÓDICAS (GUARDADO Y REPORTE) ------------------
+def ejecutar_tareas_periodicas():
+    """
+    Ejecuta el guardado en MongoDB cada 1 minuto.
+    Y el Reporte Automático cada 2 minutos (usando el contador).
+    """
+    global email_timer_counter
+    
+    # 1. Guardar en MongoDB (Cada 1 minuto)
     guardar_datos(manual=False)
-    enviar_alerta_automatica()
+    
+    # 2. Verificar si es momento de enviar el reporte (Cada 2 minutos = 2 iteraciones de 1 minuto)
+    email_timer_counter += 1
+    if email_timer_counter >= 2: 
+        enviar_reporte_automatico()
+        email_timer_counter = 0 # Reiniciar el contador
+    
+    # Programar la próxima ejecución en 60 segundos (1 minuto)
     root.after(60000, ejecutar_tareas_periodicas)
 
 
 # ------------------ FUNCIÓN DE ENVÍO DE CORREO (INTERNA) ------------------
+# Esta función se mantiene para el envío manual (por el botón).
 def _enviar_correo_final(destino_email, ventana_correo):
     """Lógica que ejecuta el envío real del correo."""
     if not MONGO_READY:
@@ -258,6 +273,7 @@ def _enviar_correo_final(destino_email, ventana_correo):
         return
 
     try:
+        # Obtener el último registro de MongoDB
         ultimo = collection.find_one(sort=[("_id", -1)])
 
         if not ultimo:
